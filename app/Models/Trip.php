@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Trip extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function driver()
+    {
+        return $this->hasMany(Driver::class);
+    }
 }

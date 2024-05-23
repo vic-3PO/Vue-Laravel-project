@@ -31,4 +31,19 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function routerNotificationForEmail()
+    {
+        return $this->mail;
+    }
+
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
 }

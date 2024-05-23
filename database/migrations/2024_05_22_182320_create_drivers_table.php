@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreingIdFor(User::class);
+            $table->foreignIdFor(User::class);
             $table->integer('year');
             $table->string('make');
             $table->string('color');
