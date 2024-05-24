@@ -8,7 +8,6 @@ class DriverController extends Controller
 {
     public function show(Request $request)
     {
-        // return back the user and associated driver model
         $user = $request->user();
         $user->load('driver');
 
@@ -30,7 +29,6 @@ class DriverController extends Controller
 
         $user->update($request->only('name'));
 
-        // create or update a driver associated with this user
         $user->driver()->updateOrCreate($request->only([
             'year',
             'make',
