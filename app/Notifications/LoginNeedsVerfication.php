@@ -7,18 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class LoginNeedsVerification extends Notification
+class LoginNeedsVerfication extends Notification
 {
     use Queueable;
-
-    protected $loginCode;
 
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        $this->loginCode = rand(111111, 999999);
+        //
     }
 
     /**
@@ -36,15 +34,19 @@ class LoginNeedsVerification extends Notification
      */
     public function toMail($notifiable)
     {
+        /// Get the login code
+        $loginCode = rand(111111, 999999);
+
         // Update the login_code in the user's record
         $notifiable->update([
-            'login_code' => $this->loginCode
+            'login_code' => $loginCode
         ]);
 
         return (new MailMessage)
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Your Login Code')
             ->greeting('Hello!')
-            ->line("Your login code is {$this->loginCode}.")
+            ->line("Your login code is {$loginCode}.")
             ->line('Please do not share this code with anyone.')
             ->salutation('Regards, Your App Team');
     }

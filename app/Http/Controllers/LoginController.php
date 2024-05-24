@@ -3,31 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Notifications\LoginNeedsVerification;
+use App\Notifications\LoginNeedsVerfication;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 
 class LoginController extends Controller
 {
+    use HasApiTokens, Notifiable;
     public function submit(Request $request)
     {
-        // validar o email
+        // Validar o e-mail
         $request->validate([
             'email' => 'required|email'
         ]);
 
-        // encontrar ou criar um modelo de usuário
+        // Encontrar ou criar um modelo de usuário
         $user = User::firstOrCreate([
             'email' => $request->email
         ]);
 
-        if (!$user) {
-            return response()->json(['message' => 'Não foi possível processar um usuário com esse endereço de e-mail.'], 401);
-        }
+        // Enviar o e-mail de verificação
+        $user->notify(new LoginNeedsVerfication());
 
-        // enviar o usuário um código de uso único
-        $user->notify(new LoginNeedsVerification());
-
-        // retornar uma resposta
+        // Retornar uma resposta
         return response()->json(['message' => 'Notificação de código de verificação enviada para o seu e-mail.']);
     }
 
@@ -50,10 +50,13 @@ class LoginController extends Controller
                 'login_code' => null
             ]);
 
-            return $user->createToken('authToken')->plainTextToken;
+            
+            //return response()->json(['message' => 'Autenticação bem-sucedida.']);
+            return $user->createToken($request->login_code)->plainTextToken;
         }
 
         // se não, retornar uma mensagem de erro
-        return response()->json(['message' => 'Código de verificação inválido.'], 401);
+        return response()->json(['message' => 'Codigo de verificacao invalido.'], 401);
     }
+
 }
