@@ -32,7 +32,6 @@ class TripController extends Controller
 
     public function show(Request $request, Trip $trip)
     {
-        // is the trip is associated with the authenticated user?
         if ($trip->user->id === $request->user()->id) {
             return $trip;
         }
@@ -48,7 +47,6 @@ class TripController extends Controller
 
     public function accept(Request $request, Trip $trip)
     {
-        // a driver accepts a trip
         $request->validate([
             'driver_location' => 'required'
         ]);
@@ -67,7 +65,6 @@ class TripController extends Controller
 
     public function start(Request $request, Trip $trip)
     {
-        // a driver has started taking a passenger to their destination
         $trip->update([
             'is_started' => true
         ]);
@@ -81,7 +78,6 @@ class TripController extends Controller
 
     public function end(Request $request, Trip $trip)
     {
-        // a driver has ended a trip
         $trip->update([
             'is_completed' => true
         ]);
@@ -95,7 +91,6 @@ class TripController extends Controller
 
     public function location(Request $request, Trip $trip)
     {
-        // update the driver's current location
         $request->validate([
             'driver_location' => 'required'
         ]);

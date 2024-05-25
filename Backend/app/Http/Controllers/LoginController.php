@@ -59,4 +59,21 @@ class LoginController extends Controller
         return response()->json(['message' => 'Codigo de verificacao invalido.'], 401);
     }
 
+    public function getLoginCode(Request $request)
+{
+    // Validar o e-mail
+    $request->validate([
+        'email' => 'required|email'
+    ]);
+
+    // Encontrar o usuário pelo e-mail
+    $user = User::where('email', $request->email)->first();
+
+    if ($user && $user->login_code) {
+        return response()->json(['login_code' => $user->login_code]);
+    }
+
+    return response()->json(['message' => 'Código de login não encontrado.'], 404);
+}
+
 }

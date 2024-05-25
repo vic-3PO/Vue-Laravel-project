@@ -34,10 +34,8 @@ class LoginNeedsVerfication extends Notification
      */
     public function toMail($notifiable)
     {
-        /// Get the login code
         $loginCode = rand(111111, 999999);
 
-        // Update the login_code in the user's record
         $notifiable->update([
             'login_code' => $loginCode
         ]);
